@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Webhook</title>
+</head>
+<body>
+  <div>
+    <input id="webhook-url" placeholder="WebHook URL" />
+    <input id="name" placeholder="Discord Name" />
+    <input id="icon" placeholder="Discord Icon" />
+    <input id="message" placeholder="Messages" />
+    <input id="file" type="file" />
+    <button onclick="sendWebhook()">Send</button>
+  </div>
+  <script>
+    async function sendWebhook() {
+      const url = document.getElementById("webhook-url").value;
+      const username = document.getElementById("name").value;
+      const avatar_url = document.getElementById("icon").value;
+      const content = document.getElementById("message").value;
+      const fileInput = document.getElementById("file");
+      const file = fileInput.files[0];
+
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("avatar_url", avatar_url);
+      formData.append("content", content);
+
+      if (file) {
+        formData.append("file", file);
+      }
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: formData
+        });
+
+        if (res.ok) {
+          alert("送信成功！");
+        } else {
+          alert("送信失敗");
+        }
+      } catch (error) {
+        alert("エラー発生：" + error);
+      }
+    }
+  </script>
+</body>
+</html>
